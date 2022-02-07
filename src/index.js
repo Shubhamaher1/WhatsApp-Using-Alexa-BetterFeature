@@ -1,5 +1,5 @@
 const inputData = document.getElementById("massage-input");
-// console.log(inputData.value);
+console.log(inputData.value);
 const sendButton = document.getElementById("send");
 const miceButton = document.getElementById("mic");
 const bodymsg = document.getElementById("section2");
@@ -15,7 +15,7 @@ sendButton.addEventListener("keypress", (e) => {
   }
 });
 miceButton.addEventListener("click", () => {
-  // vanilla();
+  vanilla();
 });
 function pushMsgInArray() {
   const itm = `
@@ -29,10 +29,28 @@ function pushMsgInArray() {
 `;
   inputValueArray.push(itm);
   showitem();
+  inputData.value = "";
 }
-// function vanilla(){
-//     const lisener;
-// }
+function vanilla() {
+  recugnization.start();
+}
+window.SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+const recugnization = new SpeechRecognition();
+recugnization.interimResults = true;
+recugnization.addEventListener("result", (e) => {
+  const text = Array.from(e.results)
+    .map((result) => result[0])
+    .map((result) => result.transcript)
+    .join("");
+  // console.log(text);
+  inputData.value = text;
+
+  // inputData.value=text;
+});
+recugnization.addEventListener("end", () => {
+  pushMsgInArray();
+});
 function showitem() {
   bodymsg.innerHTML = "";
   for (let i = 0; i < inputValueArray.length; i++) {
